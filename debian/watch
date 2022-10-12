@@ -1,0 +1,4 @@
+version=4
+opts="filenamemangle=s%(?:.*?)?r?(\d[\d.]*)\.tar\.gz%litehtml-$1.tar.gz%" \
+   https://github.com/litehtml/litehtml/tags \
+   (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate

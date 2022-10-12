@@ -1,0 +1,30 @@
+litehtml (0.5-3) UNRELEASED; urgency=medium
+
+  * update
+
+ -- Yangfl <mmyangfl@gmail.com>  Wed, 01 Jun 2022 22:09:19 -0400
+
+litehtml (0.5-3) unstable; urgency=medium
+
+  * Update symbols file
+
+ -- Yangfl <mmyangfl@gmail.com>  Sat, 18 Jul 2020 15:42:58 +0800
+
+litehtml (0.5-2) unstable; urgency=medium
+
+  * Bump debhelper compat to 13
+
+ -- Yangfl <mmyangfl@gmail.com>  Sat, 18 Jul 2020 02:34:10 +0800
+
+litehtml (0.5-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Source-only upload to allow testing migration. 
+
+ -- Boyuan Yang <byang@debian.org>  Thu, 16 Apr 2020 16:46:57 -0400
+
+litehtml (0.5-1) unstable; urgency=medium
+
+  * Initial release (Closes: #947498)
+
+ -- Yangfl <mmyangfl@gmail.com>  Wed, 11 Mar 2020 15:26:24 +0800

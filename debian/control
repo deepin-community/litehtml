@@ -1,0 +1,41 @@
+Source: litehtml
+Priority: optional
+Maintainer: Yangfl <mmyangfl@gmail.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ cmake,
+ libgumbo-dev,
+ pkg-kde-tools,
+Rules-Requires-Root: no
+Standards-Version: 4.5.0
+Section: libs
+Homepage: https://github.com/litehtml/litehtml
+Vcs-Git: https://salsa.debian.org/yangfl-guest/litehtml.git
+Vcs-Browser: https://salsa.debian.org/yangfl-guest/litehtml
+
+Package: liblitehtml-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: liblitehtml0 (= ${binary:Version}), ${misc:Depends}
+Description: lightweight HTML rendering engine with CSS2/CSS3 support (development files)
+ litehtml is the lightweight HTML rendering engine with CSS2/CSS3 support. Note
+ that litehtml itself does not draw any text, pictures or other graphics and
+ that litehtml does not depend on any image/draw/font library. You are free to
+ use any library to draw images, fonts and any other graphics. litehtml just
+ parses HTML/CSS and places the HTML elements into the correct positions
+ (renders HTML).
+ .
+ This package contains the header files.
+
+Package: liblitehtml0
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: lightweight HTML rendering engine with CSS2/CSS3 support
+ litehtml is the lightweight HTML rendering engine with CSS2/CSS3 support. Note
+ that litehtml itself does not draw any text, pictures or other graphics and
+ that litehtml does not depend on any image/draw/font library. You are free to
+ use any library to draw images, fonts and any other graphics. litehtml just
+ parses HTML/CSS and places the HTML elements into the correct positions
+ (renders HTML).

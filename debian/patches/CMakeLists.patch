@@ -1,0 +1,121 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f0e33cd..6843e20 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
+ 
+ project(litehtml CXX)
+ 
+-add_subdirectory(src/gumbo)
++include(GNUInstallDirs)
+ 
+ set(SOURCE_LITEHTML
+     src/background.cpp
+@@ -43,16 +43,103 @@ set(SOURCE_LITEHTML
+     src/web_color.cpp
+ )
+ 
+-add_library(${PROJECT_NAME} ${SOURCE_LITEHTML})
++set(HEADER_LITEHTML
++    include/litehtml.h
++    src/attributes.h
++    src/background.h
++    src/borders.h
++    src/box.h
++    src/context.h
++    src/css_length.h
++    src/css_margins.h
++    src/css_offsets.h
++    src/css_position.h
++    src/css_selector.h
++    src/document.h
++    src/el_anchor.h
++    src/el_base.h
++    src/el_before_after.h
++    src/el_body.h
++    src/el_break.h
++    src/el_cdata.h
++    src/el_comment.h
++    src/el_div.h
++    src/el_font.h
++    src/el_image.h
++    src/el_link.h
++    src/el_para.h
++    src/el_script.h
++    src/el_space.h
++    src/el_style.h
++    src/el_table.h
++    src/el_td.h
++    src/el_text.h
++    src/el_title.h
++    src/el_tr.h
++    src/element.h
++    src/html.h
++    src/html_tag.h
++    src/iterators.h
++    src/media_query.h
++    src/os_types.h
++    src/style.h
++    src/stylesheet.h
++    src/table.h
++    src/types.h
++    src/utf8_strings.h
++    src/web_color.h
++)
+ 
+-set_target_properties(${PROJECT_NAME} PROPERTIES
++add_library(${PROJECT_NAME}-static ${SOURCE_LITEHTML})
++
++set_target_properties(${PROJECT_NAME}-static PROPERTIES
+     CXX_STANDARD 11
+     C_STANDARD 99
++    PUBLIC_HEADER "${HEADER_LITEHTML}"
++    OUTPUT_NAME ${PROJECT_NAME}
++    POSITION_INDEPENDENT_CODE 1
+ )
+ 
++add_library(${PROJECT_NAME} SHARED $<TARGET_OBJECTS:${PROJECT_NAME}-static>)
++
++set_target_properties(${PROJECT_NAME} PROPERTIES
++    VERSION "${LITEHTML_VERSION}"
++    SOVERSION 0)
++
+ # Export litehtml includes.
+-target_include_directories(${PROJECT_NAME} PUBLIC src)
+-target_include_directories(${PROJECT_NAME} PUBLIC include)
++target_include_directories(${PROJECT_NAME}-static PUBLIC
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
++    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++    $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
++target_include_directories(${PROJECT_NAME}-static PRIVATE include/${PROJECT_NAME})
++
++option(LITEHTML_UTF8 "Build litehtml with UTF-8 text conversion functions." OFF)
++if (LITEHTML_UTF8)
++  target_compile_definitions(${PROJECT_NAME}-static PUBLIC LITEHTML_UTF8)
++endif()
+ 
+ # Gumbo
+ target_link_libraries(${PROJECT_NAME} PUBLIC gumbo)
++
++# install and export
++install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}-static
++    EXPORT litehtmlTargets
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}
++    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/litehtml
++)
++install(EXPORT litehtmlTargets FILE litehtmlTargets.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/litehtml)
++
++# Binary Master.css
++if (WIN32)
++    find_program(XXD_COMMAND xxd.exe ${CMAKE_CURRENT_SOURCE_DIR}/tool)
++    file(TO_NATIVE_PATH ${XXD_COMMAND} XXD_COMMAND)
++    file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/include/master.css MASTER_FILE)
++    add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/master.css.inc
++        COMMAND type ${MASTER_FILE} | "${XXD_COMMAND}" -i > ${CMAKE_CURRENT_SOURCE_DIR}/src/master.css.inc)
++else()
++    find_program(XXD_COMMAND xxd)
++    add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/master.css.inc
++        COMMAND cat ${CMAKE_CURRENT_SOURCE_DIR}/include/master.css | xxd -i > ${CMAKE_CURRENT_SOURCE_DIR}/src/master.css.inc)
++endif()
++set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/master.css.inc PROPERTIES GENERATED TRUE)

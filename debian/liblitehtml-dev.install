@@ -1,0 +1,4 @@
+usr/include/litehtml/
+usr/lib/*/liblitehtml.so
+usr/lib/*/liblitehtml.a
+usr/lib/*/cmake/litehtml/
