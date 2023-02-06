@@ -14,4 +14,7 @@ include /usr/share/dpkg/pkg-info.mk
 	dh $@ --with pkgkde-symbolshelper
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DLITEHTML_VERSION=$(DEB_VERSION_UPSTREAM)
+	dh_auto_configure -- -DLITEHTML_VERSION=$(DEB_VERSION_UPSTREAM) \
+		-DEXTERNAL_GUMBO=ON \
+		-DLITEHTML_UTF8=ON \
+		-DBUILD_TESTING=OFF

@@ -1,9 +1,10 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: litehtml
+Upstream-Contact: Yuri Kobets <yuri.kobets@gmail.com>
 Source: https://github.com/litehtml/litehtml
 
 Files: *
-Copyright: 2013-2018 Yuri Kobets
+Copyright: 2013-2022 Yuri Kobets <yuri.kobets@gmail.com>
 License: BSD-3-Clause
 
 Files: src/gumbo/*
@@ -12,7 +13,7 @@ Copyright: 2010-2011 Google Inc.
 License: Apache-2
 
 Files: debian/*
-Copyright: 2020 Yangfl <mmyangfl@gmail.com>
+Copyright: 2020-2022 Yangfl <mmyangfl@gmail.com>
 License: BSD-3-Clause
 
 License: BSD-3-Clause
