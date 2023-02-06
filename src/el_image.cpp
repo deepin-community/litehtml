@@ -17,6 +17,24 @@ void litehtml::el_image::get_content_size( size& sz, int max_width )
 	get_document()->container()->get_image_size(m_src.c_str(), 0, sz);
 }
 
+int litehtml::el_image::calc_max_height(int image_height)
+{
+	document::ptr doc = get_document();
+	int percentSize = 0;
+	if (m_css_max_height.units() == css_units_percentage)
+	{
+		auto el_parent = parent();
+		if (el_parent)
+		{
+			if (!el_parent->get_predefined_height(percentSize))
+			{
+				return image_height;
+			}
+		}
+	}
+	return doc->cvt_units(m_css_max_height, m_font_size, percentSize);
+}
+
 int litehtml::el_image::line_height() const
 {
 	return height();
@@ -48,7 +66,7 @@ int litehtml::el_image::render( int x, int y, int max_width, bool second_pass )
 		m_pos.height	= sz.height;
 		m_pos.width		= sz.width;
 
-		// check for max-height
+		// check for max-width
 		if(!m_css_max_width.is_predefined())
 		{
 			int max_width = doc->cvt_units(m_css_max_width, m_font_size, parent_width);
@@ -68,7 +86,7 @@ int litehtml::el_image::render( int x, int y, int max_width, bool second_pass )
 		// check for max-height
 		if(!m_css_max_height.is_predefined())
 		{
-			int max_height = doc->cvt_units(m_css_max_height, m_font_size);
+			int max_height = calc_max_height(sz.height);
 			if(m_pos.height > max_height)
 			{
 				m_pos.height = max_height;
@@ -91,7 +109,7 @@ int litehtml::el_image::render( int x, int y, int max_width, bool second_pass )
 		// check for max-height
 		if(!m_css_max_height.is_predefined())
 		{
-			int max_height = doc->cvt_units(m_css_max_height, m_font_size);
+			int max_height = calc_max_height(sz.height);
 			if(m_pos.height > max_height)
 			{
 				m_pos.height = max_height;
@@ -138,7 +156,7 @@ int litehtml::el_image::render( int x, int y, int max_width, bool second_pass )
 		// check for max-height
 		if(!m_css_max_height.is_predefined())
 		{
-			int max_height = doc->cvt_units(m_css_max_height, m_font_size);
+			int max_height = calc_max_height(sz.height);
 			if(m_pos.height > max_height)
 			{
 				m_pos.height = max_height;
@@ -171,12 +189,12 @@ void litehtml::el_image::parse_attributes()
 	const tchar_t* attr_height = get_attr(_t("height"));
 	if(attr_height)
 	{
-		m_style.add_property(_t("height"), attr_height, 0, false);
+		m_style.add_property(_t("height"), attr_height, 0, false, this);
 	}
 	const tchar_t* attr_width = get_attr(_t("width"));
 	if(attr_width)
 	{
-		m_style.add_property(_t("width"), attr_width, 0, false);
+		m_style.add_property(_t("width"), attr_width, 0, false, this);
 	}
 }
 
@@ -234,7 +252,7 @@ void litehtml::el_image::draw( uint_ptr hdc, int x, int y, const position* clip 
 		borders bdr = m_css_borders;
 		bdr.radius = m_css_borders.radius.calc_percents(border_box.width, border_box.height);
 
-		get_document()->container()->draw_borders(hdc, bdr, border_box, have_parent() ? false : true);
+		get_document()->container()->draw_borders(hdc, bdr, border_box, !have_parent());
 	}
 }
 
@@ -246,10 +264,10 @@ void litehtml::el_image::parse_styles( bool is_reparse /*= false*/ )
 	{
 		if(!m_css_height.is_predefined() && !m_css_width.is_predefined())
 		{
-			get_document()->container()->load_image(m_src.c_str(), 0, true);
+			get_document()->container()->load_image(m_src.c_str(), nullptr, true);
 		} else
 		{
-			get_document()->container()->load_image(m_src.c_str(), 0, false);
+			get_document()->container()->load_image(m_src.c_str(), nullptr, false);
 		}
 	}
 }

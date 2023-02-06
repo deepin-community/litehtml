@@ -1,14 +1,24 @@
-litehtml (0.5-3) UNRELEASED; urgency=medium
+litehtml (0.6-1deepin) unstable; urgency=medium
 
-  * update
+  * Non-maintainer upload.
 
- -- Yangfl <mmyangfl@gmail.com>  Wed, 01 Jun 2022 22:09:19 -0400
+ -- LiChengGang <lichenggang@uniontech.com>  Mon, 06 Feb 2023 14:54:34 +0800
 
-litehtml (0.5-3) unstable; urgency=medium
+litehtml (0.6-1) unstable; urgency=medium
 
-  * Update symbols file
+  * New upstream release
+  * Update symbols from build logs
+  * Bump Standards-Version to 4.6.1
+  [ Rob Savoury ]
+  * debian/patches/: Rebase CMakeLists.patch (partially upstreamed, but with
+    no multiarch for install so retain that, also fix new litehtmlConfig.cmake
+    to not search for gumbo with find_dependency due no gumbo CMake config)
+    (Closes: #1018006)
+  * d/control: Add required libgumbo-dev dependency to liblitehtml-dev package
+  * d/rules: Add {EXTERNAL_GUMBO,LITEHTML_UTF8}=ON, BUILD_TESTING=OFF configs
+  * Update symbols from build logs
 
- -- Yangfl <mmyangfl@gmail.com>  Sat, 18 Jul 2020 15:42:58 +0800
+ -- Yangfl <mmyangfl@gmail.com>  Tue, 11 Oct 2022 06:06:37 +0800
 
 litehtml (0.5-2) unstable; urgency=medium
 
