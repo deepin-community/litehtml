@@ -1,17 +1,15 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index fe71729..1c8b744 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -16,6 +16,8 @@ if(NOT EXTERNAL_GUMBO)
+@@ -22,6 +22,8 @@ if(NOT EXTERNAL_GUMBO)
      add_subdirectory(src/gumbo)
  endif()
  
 +include(GNUInstallDirs)
 +
  set(SOURCE_LITEHTML
-     src/background.cpp
-     src/box.cpp
-@@ -131,40 +133,43 @@ set(TEST_LITEHTML
+     src/codepoint.cpp
+     src/css_length.cpp
+@@ -160,35 +162,38 @@ set(TEST_LITEHTML
  set(PROJECT_LIB_VERSION ${PROJECT_MAJOR}.${PROJECT_MINOR}.0)
  set(PROJECT_SO_VERSION ${PROJECT_MAJOR})
  
@@ -38,18 +36,12 @@ index fe71729..1c8b744 100644
 -target_include_directories(${PROJECT_NAME} PRIVATE include/${PROJECT_NAME})
 +target_include_directories(${PROJECT_NAME}-static PRIVATE include/${PROJECT_NAME})
  
- option(LITEHTML_UTF8 "Build litehtml with UTF-8 text conversion functions." OFF)
- if (LITEHTML_UTF8)
--  target_compile_definitions(${PROJECT_NAME} PUBLIC LITEHTML_UTF8)
-+  target_compile_definitions(${PROJECT_NAME}-static PUBLIC LITEHTML_UTF8)
- endif()
- 
  # Gumbo
  target_link_libraries(${PROJECT_NAME} PUBLIC gumbo)
  
  # install and export
 -install(TARGETS ${PROJECT_NAME}
-+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}-static
++install(TARGETS ${PROJECT_NAME}  ${PROJECT_NAME}-static
      EXPORT litehtmlTargets
 -    RUNTIME DESTINATION bin COMPONENT libraries
 -    ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT libraries
@@ -65,10 +57,8 @@ index fe71729..1c8b744 100644
 +install(FILES cmake/litehtmlConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/litehtml)
 +install(EXPORT litehtmlTargets FILE litehtmlTargets.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/litehtml)
  
- # Generate master.css.inc
- function(make_inc src dst)
-diff --git a/cmake/litehtmlConfig.cmake b/cmake/litehtmlConfig.cmake
-index 5eedcf4..8cff5ed 100644
+ # Tests
+ 
 --- a/cmake/litehtmlConfig.cmake
 +++ b/cmake/litehtmlConfig.cmake
 @@ -1,3 +1 @@

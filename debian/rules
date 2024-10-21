@@ -16,5 +16,4 @@ include /usr/share/dpkg/pkg-info.mk
 override_dh_auto_configure:
 	dh_auto_configure -- -DLITEHTML_VERSION=$(DEB_VERSION_UPSTREAM) \
 		-DEXTERNAL_GUMBO=ON \
-		-DLITEHTML_UTF8=ON \
-		-DBUILD_TESTING=OFF
+		-DLITEHTML_BUILD_TESTING=OFF
